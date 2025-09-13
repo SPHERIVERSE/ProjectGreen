@@ -1,9 +1,12 @@
 // utils/axiosInstance.ts
-import axios from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 
-const api = axios.create({
+const api: AxiosInstance & { isAxiosError: typeof AxiosError.isAxiosError } = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000',
-});
+}) as any;
+
+// Add isAxiosError helper
+api.isAxiosError = axios.isAxiosError;
 
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {

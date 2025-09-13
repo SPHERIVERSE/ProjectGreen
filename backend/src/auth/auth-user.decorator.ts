@@ -1,9 +1,9 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const AuthUser = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
+  (data: string, ctx: ExecutionContext) => { // ⬅️ data is now typed as string
     const request = ctx.switchToHttp().getRequest();
-    return request.user; // assumes JwtAuthGuard attaches user object to request
+    const user = request.user;
+    return data ? user?.[data] : user; // ⬅️ Returns the specific key or the whole user object
   },
 );
-
