@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { SupabaseModule } from './supabase/supabase.module';
 import { TrainingModule } from './training/training.module';
 import { CivicReportModule } from './civic-report/civic-report.module';
+import { MapsModule } from './maps/maps.module';
 import { APP_PIPE } from '@nestjs/core';
 
 @Module({
@@ -17,6 +18,7 @@ import { APP_PIPE } from '@nestjs/core';
     SupabaseModule,
     TrainingModule,
     CivicReportModule,
+    MapsModule,
   ],
   controllers: [], // Ensure this is not missing if you have no global controllers
   providers: [

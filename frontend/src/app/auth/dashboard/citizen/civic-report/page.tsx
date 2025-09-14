@@ -42,8 +42,8 @@ const CivicReportPage = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [votingStates, setVotingStates] = useState<Record<string, boolean>>({});
   const [locationMessage, setLocationMessage] = useState<string>('Getting your location...');
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null); // ✅ New state for photo preview
-  const [isMapFullscreen, setIsMapFullscreen] = useState(false); // ✅ State for full-screen mode
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [isMapFullscreen, setIsMapFullscreen] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -127,7 +127,7 @@ const CivicReportPage = () => {
       return report;
     });
     setOtherReports(updatedReports);
-    
+
     try {
       await axios.post(`/civic-report/${reportId}/${type}`);
       setMessage(`✅ Successfully ${type}ed the report!`);
@@ -153,25 +153,23 @@ const CivicReportPage = () => {
   const handleSubmitReport = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    
+
     if (!position) {
       setMessage('❌ Location not available. Please allow location access to submit a report.');
       return;
     }
-    
+
     formData.append('latitude', position.lat.toString());
     formData.append('longitude', position.lng.toString());
-    
+
     try {
       await axios.post('/civic-report', formData);
-      
+
       setMessage('✅ Report submitted successfully!');
-      
+
       formRef.current?.reset();
-      setPhotoPreview(null); // ✅ Reset the photo preview on successful submission
-      
+      setPhotoPreview(null);
       await fetchMyReports();
-      
       setTimeout(() => setMessage(null), 5000);
 
     } catch (err: any) {
@@ -203,10 +201,10 @@ const CivicReportPage = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {reports.map(report => (
-          <ReportCard 
-            key={report.id} 
-            report={report} 
-            handleVote={handleVote} 
+          <ReportCard
+            key={report.id}
+            report={report}
+            handleVote={handleVote}
             votingStates={votingStates}
             onWithdraw={activeTab === 'MINE' ? handleWithdrawReport : undefined}
           />
@@ -219,7 +217,7 @@ const CivicReportPage = () => {
     <RoleGuard role="CITIZEN">
       <div className="p-6 space-y-6">
         <h1 className="text-3xl font-bold text-white">🏛️ Civic Reporting</h1>
-        
+
         {message && (
           <div className={`p-3 rounded-lg ${
             message.includes('✅') ? 'bg-green-600' : 'bg-red-600'
@@ -244,23 +242,23 @@ const CivicReportPage = () => {
             )}
           </div>
           <form ref={formRef} onSubmit={handleSubmitReport} className="space-y-4">
-            <input 
-              type="text" 
-              name="title" 
-              placeholder="Report Title" 
-              required 
-              className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:border-green-500" 
+            <input
+              type="text"
+              name="title"
+              placeholder="Report Title"
+              required
+              className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:border-green-500"
             />
-            <textarea 
-              name="description" 
-              placeholder="Describe the issue..." 
-              required 
+            <textarea
+              name="description"
+              placeholder="Describe the issue..."
+              required
               rows={3}
-              className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:border-green-500" 
+              className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:border-green-500"
             />
-            <select 
-              name="type" 
-              required 
+            <select
+              name="type"
+              required
               className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:border-green-500"
             >
               <option value="">Select Issue Type</option>
@@ -273,26 +271,25 @@ const CivicReportPage = () => {
               <option value="public_bin_request">Request for Public Bin</option>
               <option value="public_toilet_request">Request for Public Toilet</option>
             </select>
-            {/* ✅ Conditionally render the image preview */}
             {photoPreview && (
               <div className="relative w-full h-48 rounded-lg overflow-hidden">
-                <Image 
-                  src={photoPreview} 
-                  alt="Selected photo preview" 
-                  layout="fill" 
-                  objectFit="cover" 
+                <Image
+                  src={photoPreview}
+                  alt="Selected photo preview"
+                  layout="fill"
+                  objectFit="cover"
                 />
               </div>
             )}
-            <input 
-              type="file" 
-              name="photo" 
-              accept="image/*" 
-              onChange={handlePhotoChange} // ✅ Add the onChange handler
+            <input
+              type="file"
+              name="photo"
+              accept="image/*"
+              onChange={handlePhotoChange}
               className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600"
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={!position}
               className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-500 text-white py-3 px-6 rounded font-semibold transition-colors"
             >
@@ -305,8 +302,8 @@ const CivicReportPage = () => {
           <div className="flex border-b border-gray-700">
             <button
               className={`flex-1 py-4 px-6 text-center font-semibold transition-colors ${
-                activeTab === 'MINE' 
-                  ? 'bg-purple-600 text-white' 
+                activeTab === 'MINE'
+                  ? 'bg-purple-600 text-white'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
               }`}
               onClick={() => setActiveTab('MINE')}
@@ -315,8 +312,8 @@ const CivicReportPage = () => {
             </button>
             <button
               className={`flex-1 py-4 px-6 text-center font-semibold transition-colors ${
-                activeTab === 'OTHERS' 
-                  ? 'bg-purple-600 text-white' 
+                activeTab === 'OTHERS'
+                  ? 'bg-purple-600 text-white'
                   : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
               }`}
               onClick={() => setActiveTab('OTHERS')}
@@ -330,21 +327,21 @@ const CivicReportPage = () => {
               <div className="flex justify-center space-x-2">
                 <button
                   className={`px-4 py-2 rounded font-medium transition-colors ${
-                    viewMode === 'LIST' 
-                      ? 'bg-blue-600 text-white' 
+                    viewMode === 'LIST'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
                   }`}
                   onClick={() => {
                     setViewMode('LIST');
-                    setIsMapFullscreen(false); // Exit fullscreen when changing view
+                    setIsMapFullscreen(false);
                   }}
                 >
                   📋 List View
                 </button>
                 <button
                   className={`px-4 py-2 rounded font-medium transition-colors ${
-                    viewMode === 'MAP' 
-                      ? 'bg-blue-600 text-white' 
+                    viewMode === 'MAP'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
                   }`}
                   onClick={() => setViewMode('MAP')}
@@ -381,11 +378,11 @@ const CivicReportPage = () => {
             ) : viewMode === 'LIST' ? (
               renderReports(otherReports)
             ) : (
-              <div 
+              <div
                 className={`w-full rounded-lg overflow-hidden transition-all duration-300 ${
                   isMapFullscreen
-                    ? 'fixed inset-0 z-50 rounded-none' // Fullscreen styles
-                    : 'h-[600px] relative' // Default styles
+                    ? 'fixed inset-0 z-50 rounded-none'
+                    : 'h-[600px] relative'
                 }`}
               >
                 <Map
@@ -394,6 +391,7 @@ const CivicReportPage = () => {
                   userPosition={position}
                   loggedInUserId={currentUserId}
                   onVote={handleVote}
+                  votingStates={votingStates} // Pass the votingStates prop here
                 />
               </div>
             )}
@@ -405,4 +403,3 @@ const CivicReportPage = () => {
 };
 
 export default CivicReportPage;
-

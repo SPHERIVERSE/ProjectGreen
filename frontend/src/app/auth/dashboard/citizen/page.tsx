@@ -398,34 +398,57 @@ export default function CitizenDashboard() {
             </div>
           </div>
 
-{/* Civic Reporting */}
-<div
-  className="game-card p-8 cursor-pointer group hover:scale-105 transition-all duration-500"
-  onClick={() => {
-    console.log('Redirecting to civic-report...');
-    router.push('/auth/dashboard/citizen/civic-report');
-    }}
->
-  <div className="flex items-center justify-between mb-6">
-    <div>
-      <h2 className="text-3xl font-bold text-white mb-2">
-        🏛️ Civic Reporting
-      </h2>
-      <p className="text-gray-300">
-        Report local issues and support community action
-      </p>
-    </div>
-    <div className="text-6xl group-hover:scale-110 transition-transform duration-300">
-      📍
-    </div>
-  </div>
-  <div className="text-gray-400 text-sm">
-    Click to view map, submit issues, and support reports.
-  </div>
-</div>
+          {/* Live Asset Tracker - NEW SECTION */}
+          <div
+            className="game-card p-8 cursor-pointer group hover:scale-105 transition-all duration-500"
+            onClick={() => {
+              console.log('Redirecting to live asset tracker...');
+              router.push('/auth/dashboard/citizen/track-assets');
+            }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  🚚 Live Asset Tracker
+                </h2>
+                <p className="text-gray-300">
+                  View waste collection vehicles and public facilities in real-time
+                </p>
+              </div>
+              <div className="text-6xl group-hover:scale-110 transition-transform duration-300">
+                🗺️
+              </div>
+            </div>
+            <div className="text-gray-400 text-sm">
+              Click to view real-time locations of waste vehicles and facilities.
+            </div>
+          </div>
 
-
-
+          {/* Civic Reporting */}
+          <div
+            className="game-card p-8 cursor-pointer group hover:scale-105 transition-all duration-500"
+            onClick={() => {
+              console.log('Redirecting to civic-report...');
+              router.push('/auth/dashboard/citizen/civic-report');
+            }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  🏛️ Civic Reporting
+                </h2>
+                <p className="text-gray-300">
+                  Report local issues and support community action
+                </p>
+              </div>
+              <div className="text-6xl group-hover:scale-110 transition-transform duration-300">
+                📍
+              </div>
+            </div>
+            <div className="text-gray-400 text-sm">
+              Click to view map, submit issues, and support reports.
+            </div>
+          </div>
 
           {/* Leaderboard CTA */}
           <div className="slide-in-up">

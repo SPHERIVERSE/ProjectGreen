@@ -31,13 +31,13 @@ export default function RoleGuard({ role, children }: RoleGuardProps) {
         const user = res.data.user;
 
         if (user.role !== role) {
-          // 🚨 Wrong role → redirect to *their* dashboard
           router.push(`/auth/dashboard/${user.role.toLowerCase()}`);
           return;
         }
 
         setAuthorized(true);
       } catch (err) {
+        localStorage.removeItem('access_token');
         router.push('/auth/login');
       } finally {
         setLoading(false);
@@ -47,9 +47,15 @@ export default function RoleGuard({ role, children }: RoleGuardProps) {
     checkUser();
   }, [role, router]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
+        <p className="text-xl animate-pulse">Loading...</p>
+      </div>
+    );
+  }
+  
   if (!authorized) return null;
 
   return <>{children}</>;
 }
-
