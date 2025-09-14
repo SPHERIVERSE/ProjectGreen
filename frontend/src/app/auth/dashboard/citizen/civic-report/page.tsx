@@ -43,7 +43,8 @@ const CivicReportPage = () => {
   const [votingStates, setVotingStates] = useState<Record<string, boolean>>({});
   const [locationMessage, setLocationMessage] = useState<string>('Getting your location...');
   const [photoPreview, setPhotoPreview] = useState<string | null>(null); // ✅ New state for photo preview
-  
+  const [isMapFullscreen, setIsMapFullscreen] = useState(false); // ✅ State for full-screen mode
+
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const CivicReportPage = () => {
         (err) => {
           console.error('Geolocation error:', err);
           setLocationMessage('❌ Location access denied or unavailable. Using default location.');
-          setPosition({ lat: 28.6139, lng: 77.2090 }); 
+          setPosition({ lat: 28.6139, lng: 77.2090 });
         },
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
       );
@@ -333,7 +334,10 @@ const CivicReportPage = () => {
                       ? 'bg-blue-600 text-white' 
                       : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
                   }`}
-                  onClick={() => setViewMode('LIST')}
+                  onClick={() => {
+                    setViewMode('LIST');
+                    setIsMapFullscreen(false); // Exit fullscreen when changing view
+                  }}
                 >
                   📋 List View
                 </button>
@@ -347,6 +351,26 @@ const CivicReportPage = () => {
                 >
                   🗺️ Map View
                 </button>
+                {viewMode === 'MAP' && (
+                  <button
+                    className={`px-4 py-2 rounded font-medium transition-colors ${
+                      isMapFullscreen
+                        ? 'bg-red-600 text-white hover:bg-red-700'
+                        : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                    }`}
+                    onClick={() => setIsMapFullscreen(!isMapFullscreen)}
+                  >
+                    {isMapFullscreen ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path d="M16.5 6a1.5 1.5 0 011.5 1.5v3.75a.75.75 0 01-1.5 0V7.5h-3.75a.75.75 0 010-1.5h3.75zM7.5 16.5a1.5 1.5 0 01-1.5-1.5v-3.75a.75.75 0 011.5 0v2.25h2.25a.75.75 0 010 1.5H7.5z" />
+                      </svg>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -357,7 +381,13 @@ const CivicReportPage = () => {
             ) : viewMode === 'LIST' ? (
               renderReports(otherReports)
             ) : (
-              <div className="h-[600px] w-full rounded-lg overflow-hidden">
+              <div 
+                className={`w-full rounded-lg overflow-hidden transition-all duration-300 ${
+                  isMapFullscreen
+                    ? 'fixed inset-0 z-50 rounded-none' // Fullscreen styles
+                    : 'h-[600px] relative' // Default styles
+                }`}
+              >
                 <Map
                   reports={otherReports}
                   refreshReports={fetchOtherReports}
@@ -375,3 +405,4 @@ const CivicReportPage = () => {
 };
 
 export default CivicReportPage;
+

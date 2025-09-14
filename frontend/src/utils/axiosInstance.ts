@@ -2,7 +2,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
 const api: AxiosInstance & { isAxiosError: typeof AxiosError.isAxiosError } = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000',
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://192.168.1.16:3000',
 }) as any;
 
 // Add isAxiosError helper
